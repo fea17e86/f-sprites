@@ -4,6 +4,7 @@ const config = {};
 config.nodeModules = 'node_modules/';
 config.src = 'src/';
 config.bin = 'bin/';
+config.libraryName = 'fexture.js';
 config.examples = 'examples/';
 config.examplesCss = config.examples + 'css/';
 
@@ -33,19 +34,26 @@ gulp.task('css', function (callback) {
       .pipe(minifyCss({compatibility: 'ie8'}))
       .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(config.css))
+    .pipe(gulp.dest(config.examplesCss))
     .pipe(connect.reload());
 });
 
-gulp.task('build-f-texture', function () {
+gulp.task('fexture', ['concat-fexture'], function () {
+  return gulp.start('minify-fexture');
+});
+
+gulp.task('concat-fexture', function () {
   return gulp.src(config.src + '**/*.js')
     .pipe(sourcemaps.init())
       .pipe(jshint())
       .pipe(jshint.reporter('default'))
-      .pipe(concat('f-texture.js'))
+      .pipe(concat(config.libraryName))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(config.bin))
-    .pipe(gulp.src(config.bin + '**/*.js'))
+    .pipe(gulp.dest(config.bin));
+});
+
+gulp.task('minify-fexture', function () {
+  return gulp.src(config.bin + '**/*.js')
     .pipe(sourcemaps.init())
       .pipe(uglify())
       .pipe(rename({suffix: '.min'}))
@@ -60,7 +68,7 @@ gulp.task('build-f-texture', function () {
 gulp.task('watch', function () {
   gulp.watch(config.examples + '**/*.html', ['html']);
   gulp.watch(config.examplesCss + '**/*.css', ['css']);
-  gulp.watch(config.src + '**/*.js', ['build-f-texture']);
+  gulp.watch(config.src + '**/*.js', ['fexture']);
 });
 
 
@@ -68,7 +76,6 @@ gulp.task('watch', function () {
 
 gulp.task('server', function() {
   connect.server({
-    root: config.examples,
     livereload: true
   });
 });
@@ -81,7 +88,7 @@ gulp.task('clean', function (callback) {
 });
 
 gulp.task('build', ['clean'], function () {
-  return gulp.start('build-f-texture', 'css', 'html');
+  return gulp.start('fexture', 'css', 'html');
 });
 
 gulp.task('dev', ['build'], function () {

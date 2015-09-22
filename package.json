@@ -1,15 +1,15 @@
 {
-  "name": "f-textures",
+  "name": "fexture",
   "version": "0.0.0",
-  "description": "A library fro creating custom sprites in JavaScript.",
-  "main": "index.html",
+  "description": "A library fro creating custom textures with Pixi.js.",
+  "main": "examples/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "fea17e86",
   "repository": {
     "type": "git",
-    "url": "git@github.com:fea17e86/f-sprites.git"
+    "url": "git@github.com:fea17e86/fexture.git"
   },
   "devDependencies": {
     "del": "^2.0.2",
@@ -25,5 +25,6 @@
   },
   "dependencies": {
     "pixi.js": "^3.0.7"
-  }
+  },
+  "license": "LGPL-3.0"
 }
